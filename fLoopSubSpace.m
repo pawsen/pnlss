@@ -94,10 +94,10 @@ function [models,figHandle] = fLoopSubSpace(freq,G,covG,na,max_r,optimize,forces
 %       1.2 : April 20, 2016
 %           Help updated
 %
-%	Copyright (c) Vrije Universiteit Brussel � dept. ELEC
+%	Copyright (c) Vrije Universiteit Brussel ï¿½ dept. ELEC
 %   All rights reserved.
 %   Software can be used freely for non-commercial applications only.
-%   Disclaimer: This software is provided �as is� without any warranty.
+%   Disclaimer: This software is provided ï¿½as isï¿½ without any warranty.
 %
 %   See also fFreqDomSubSpace, fss2frf, fStabilize, fVec, fLevMarqFreqSSz, fIsUnstable, fPlotFrfMIMO
 
@@ -157,7 +157,7 @@ end
 for n = na % Scan all model orders
     min_r = n + 1;
     for r = min_r:max_r % Scan all r values
-        disp(['n = ' num2str(n) ' r = ' num2str(r)])
+        fprintf('n = %d, r = %d',n,r);
         [A,B,C,D,unstable] = fFreqDomSubSpace(G,covG,freq/fs,n,r); % Frequency-domain subspace algorithm
         if unstable && ~forcestability
             unstable = false; % If stability is not forced, 'unstable' is always false
@@ -174,6 +174,7 @@ for n = na % Scan all model orders
         end
         KSS = KSS/F; % Normalize with the number of excited frequencies
         KSSs(n,r) = KSS; % Store the cost function of the subspace algorithm
+        fprintf(', cost %0.4f ',KSS);
       
         if optimize > 0 % If Levenberg-Marquardt optimizations requested
             [ALM,BLM,CLM,DLM] = fLevMarqFreqSSz(freq/fs,G,covG,A,B,C,D,optimize); % Optimize model parameters
@@ -185,6 +186,7 @@ for n = na % Scan all model orders
             end
             KLM = KLM/F; % Normalize with the number of excited frequencies
             KLMs(n,r) = KLM; % Save the cost function of the LM optimization
+            fprintf('optimzed %0.4f',KLM);
             
             if min(KSSs(n,:)) == KSS % If the current subspace model achieves the smallest cost so far ...
                 temp = {A,B,C,D}; % ... temporarily save the parameters of that model
@@ -207,6 +209,7 @@ for n = na % Scan all model orders
         if showfigs
           waitbar(((n - min_na) + (r - min_r)/(max_r - min_r))/(max_na - min_na + 1),h);
         end
+        fprintf('\n');
     end
 end
 if showfigs
