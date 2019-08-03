@@ -31,10 +31,10 @@ function fPlotFrfMIMO(G,freq,LineSpec,varargin)
 %       1.1 : April 20, 2016
 %           Help updated
 %
-%	Copyright (c) Vrije Universiteit Brussel – dept. ELEC
+%	Copyright (c) Vrije Universiteit Brussel ï¿½ dept. ELEC
 %   All rights reserved.
 %   Software can be used freely for non-commercial applications only.
-%   Disclaimer: This software is provided “as is” without any warranty.
+%   Disclaimer: This software is provided ï¿½as isï¿½ without any warranty.
 %
 %	See also fMetricPrefix, plot
 
@@ -49,9 +49,9 @@ if nargin < 3
 end
 
 % Set scale of the frequency axis
-[freqlabel,schaal] = fMetricPrefix(mean(freq));
-freqlabel = ['Frequency [' freqlabel 'Hz]'];
-freq = freq*schaal;
+% [freqlabel,schaal] = fMetricPrefix(mean(freq));
+% freqlabel = ['Frequency [' freqlabel 'Hz]'];
+% freq = freq*schaal;
 
 % Make the amplitude versus frequency plots
 [p,m,~] = size(G);
@@ -61,10 +61,11 @@ for i = 1:p
         hold on
         plot(freq,db(squeeze(G(i,j,:))),LineSpec,varargin{:})
         if i == p % xlabels only on the bottom plots
-            xlabel(freqlabel)
+%             xlabel(freqlabel)
+            xlabel('Frequency (Hz)')
         end
         if j == 1 % ylabels only on the left plots
-            ylabel('Amplitude [dB]')
+            ylabel('Amplitude (dB)')
         end
         title(['G_{' num2str(i) num2str(j) '}'])
     end

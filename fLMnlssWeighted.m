@@ -218,17 +218,16 @@ else
 end
 
 % Prepare for Levenberg-Marquardt optimization
-cwd = pwd; % The current working directory
-addpath(cwd); % Add current working directory to the search path
-cd(tempdir); % Switch to the system's temporary folder
-warning('off','MATLAB:pack:InvalidInvocationLocation'); % Disable warning
-pack; % Consolidate workspace memory
+% cwd = pwd; % The current working directory
+% addpath(cwd); % Add current working directory to the search path
+% cd(tempdir); % Switch to the system's temporary folder
+% warning('off','MATLAB:pack:InvalidInvocationLocation'); % Disable warning
+% pack; % Consolidate workspace memory
 disp('Starting L.M. Optimization...')
 % inittime = clock; % Save current time to estimate the end time during the optimization 
 
 % Levenberg-Marquardt optimization
 while Count < MaxCount
-        
     % Compute the Jacobian w.r.t. the elements in the matrices A, B, E, F, D, and C
     sJacobianAnalytical;
     
@@ -248,13 +247,14 @@ while Count < MaxCount
     else
         J = J.*repmat(W(without_T2),1,size(J,2)); % Add time-domain weighting
     end
+
     % (Potentially) improve numerical conditioning
     [J,scaling] = fNormalizeColumns(J); % Normalize columns to unit rms value
 
     K = K_old; % Initial value of the cost function (=> unsuccessful step)
     [U,S,V] = svd(J,0); % Singular value decomposition of the Jacobian
     clear J;
-    pack; % Consolidate workspace memory
+    % pack; % Consolidate workspace memory
 
     if isnan(K)
         break % Stop nonlinear optimization (typically when initial model is unstable)
@@ -317,7 +317,7 @@ while Count < MaxCount
                 lambda = S(1,1); % Initial Levenberg-Marquardt parameter = dominant singular value
             else
                 lambda = lambda*sqrt(10); % Lean more towards gradient descent method (converges in larger range)
-            end;
+            end
         elseif isnan(K) % Typically if model is unstable
             lambda = lambda*sqrt(10); % Lean more towards gradient descent method (converges in larger range)
         else % Step was succesful
@@ -358,7 +358,7 @@ while Count < MaxCount
             model.Cost = K; % Save the obtained cost
             models = [models,model]; % Collect models after successful step
         end
-        pack; % Consolidate workspace memory
+        % pack; % Consolidate workspace memory
         model = model_new; % u_val saved in final model (best on estimation data), cost not saved
         states = states_new; %#ok States of the model used in analytical calculation of the Jacobian
         A = model.A; %#ok State matrix used in analytical calculation Jacobian
@@ -373,7 +373,7 @@ end
 y_mod = fFilterNLSS(model,u); % Output of the optimized model
 
 disp('End of L.M. Optimization.')
-cd(cwd); % Return to original working directory
+% cd(cwd); % Return to original working directory
 end
 
 % ---------------- Help functions ----------------

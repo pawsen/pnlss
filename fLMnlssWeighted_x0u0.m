@@ -130,10 +130,10 @@ function [model,y_mod,models,Cost] = fLMnlssWeighted_x0u0(u,y,model,MaxCount,W,l
 %           Fixed a bug where the time-domain weighting produced a
 %           matrix-valued cost function instead of a scalar one.
 %
-%	Copyright (c) Vrije Universiteit Brussel – dept. ELEC
+%	Copyright (c) Vrije Universiteit Brussel ï¿½ dept. ELEC
 %   All rights reserved.
 %   Software can be used freely for non-commercial applications only.
-%   Disclaimer: This software is provided “as is” without any warranty.
+%   Disclaimer: This software is provided ï¿½as isï¿½ without any warranty.
 %
 %	See also fCreateNLSSmodel, fFilterNLSS, fComputeIndicesTransientRemovalArb, fWeightJacobSubSpace, fReIm 
 
@@ -270,10 +270,10 @@ else
 end
 
 % Prepare for Levenberg-Marquardt optimization
-cwd = pwd; % The current working directory
-cd(tempdir); % Switch to the system's temporary folder
-warning('off','MATLAB:pack:InvalidInvocationLocation'); % Disable warning
-pack; % Consolidate workspace memory
+% cwd = pwd; % The current working directory
+% cd(tempdir); % Switch to the system's temporary folder
+% warning('off','MATLAB:pack:InvalidInvocationLocation'); % Disable warning
+% pack; % Consolidate workspace memory
 disp('Starting L.M. Optimization...')
 % inittime = clock; % Save current time to estimate the end time during the optimization 
 
@@ -305,7 +305,7 @@ while Count < MaxCount
     K = K_old; % Initial value of the cost function (=> unsuccessful step)
     [U,S,V] = svd(J,0); % Singular value decomposition of the Jacobian
     clear J;
-    pack; % Consolidate workspace memory
+    % pack; % Consolidate workspace memory
 
     if isnan(K)
         break % Stop nonlinear optimization (typically when initial model is unstable)
@@ -409,7 +409,7 @@ while Count < MaxCount
             model.Cost = K; % Save the obtained cost
             models = [models,model]; % Collect models after successful step
         end
-        pack; % Consolidate workspace memory
+%         pack; % Consolidate workspace memory
         model = model_new; % u_val saved in final model (best on estimation data), cost not saved
         states = states_new; %#ok States of the model used in analytical calculation of the Jacobian
         A = model.A; %#ok State matrix used in analytical calculation Jacobian
@@ -424,7 +424,7 @@ end
 y_mod = fFilterNLSS(model,u,model.x0,model.u0); % Output of the optimized model
 
 disp('End of L.M. Optimization.')
-cd(cwd); % Return to original working directory
+% cd(cwd); % Return to original working directory
 end
 
 % ---------------- Help functions ----------------

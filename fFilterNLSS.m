@@ -62,10 +62,10 @@ function [y,states] = fFilterNLSS(model,u,varargin)
 %       1.2 : April 19, 2016
 %           Help updated
 %
-%	Copyright (c) Vrije Universiteit Brussel – dept. ELEC
+%	Copyright (c) Vrije Universiteit Brussel ï¿½ dept. ELEC
 %   All rights reserved.
 %   Software can be used freely for non-commercial applications only.
-%   Disclaimer: This software is provided “as is” without any warranty.
+%   Disclaimer: This software is provided ï¿½as isï¿½ without any warranty.
 %
 %	See also fCreateNLSSmodel, fComputeIndicesTransient, fFilterspeedNL, fComputeIndicesTransientRemoval
 
@@ -79,6 +79,9 @@ function [y,states] = fFilterNLSS(model,u,varargin)
 % Determine the initial state
 if nargin >= 3 % If initial state specified
     x0 = varargin{1}; % Initial state
+    if size(x0,1) ~= model.n || size(x0,2) ~= 1 % Check dimensions
+        x0 = x0.';
+    end
     if size(x0,1) ~= model.n || size(x0,2) ~= 1 % Check dimensions
         error('Initial state should have dimension n x 1')
     end
