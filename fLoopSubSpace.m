@@ -182,7 +182,7 @@ for n = na % Scan all model orders
         end
         KSS = KSS/F; % Normalize with the number of excited frequencies
         KSSs(n,r) = KSS; % Store the cost function of the subspace algorithm
-        fprintf(', cost %0.4f ',KSS);
+        fprintf(', cost %0.4g ',KSS);
 
         if optimize > 0 % If Levenberg-Marquardt optimizations requested
             [ALM,BLM,CLM,DLM] = fLevMarqFreqSSz(freq/fs,G,covG,A,B,C,D,optimize); % Optimize model parameters
@@ -194,7 +194,7 @@ for n = na % Scan all model orders
             end
             KLM = KLM/F; % Normalize with the number of excited frequencies
             KLMs(n,r) = KLM; % Save the cost function of the LM optimization
-            fprintf('optimzed %0.4f',KLM);
+            fprintf('optimzed %0.4g',KLM);
             
             if min(KSSs(n,:)) == KSS % If the current subspace model achieves the smallest cost so far ...
                 temp = {A,B,C,D}; % ... temporarily save the parameters of that model
@@ -204,14 +204,17 @@ for n = na % Scan all model orders
             else
                 if min(KLMs(n,~logical(unstablesLM(n,:)))) == KLM % If the current optimized model achieves the smallest cost of all stable optimized models so far ...
                     models{n} = {ALM,BLM,CLM,DLM}; % ... save the parameters of the current model
+                    best_r = r;
                 end
             end
             if all(unstablesLM(n,n+1:max_r) == 1) % If all optimized models are unstable and stability is forced, ...
                 models{n} = temp; % ... take the parameters of the best non-optimized subspace model so far (stable or stabilized)
+                best_r = r;
             end
         else % No optimization
             if min(KSSs(n,:)) == KSS % If it is the smallest and stable/stabilized (or unstable, but stability not forced)
                 models{n} = {A,B,C,D};
+                best_r = r;
             end
         end
         fprintf('\n');
@@ -219,6 +222,7 @@ for n = na % Scan all model orders
             waitbar(((n - min_na) + (r - min_r)/(max_r - min_r))/(max_na - min_na + 1),h);
         end
     end
+    fprintf('\n## Best r: %d ##\n\n',best_r);
 end
 if showfigs
     close(h);

@@ -28,13 +28,13 @@ if optimize > 0
         set(gca,'ColorOrderIndex',1) % Restart from the same color as in the KSSs plot
     catch % Older Matlab versions restart by default from the same color, and 'ColorOrderIndex' is not available
     end
-    semilogy(unstablesLM','ko') % Encircle unstable models
+    semilogy(unstablesLM','go') % Encircle unstable models
 end
 ylabel('V_{WLS}')
 xlabel('r')
 legend(cellstr([repmat('n = ',max_na - min_na + 1,1) num2str((min_na:max_na)')]));
 title({'Cost functions of subspace models (dots, stablilized models encircled in gray)', ...
-    'and of LM-optimized models (stars, unstable models encircled in black)'})
+    'and of LM-optimized models (stars, unstable models encircled in green)'})
 xlim([min_na (max_r + 1)])
 set(gcf,'Name','Summary')
 set(gcf,'NumberTitle','off')
